@@ -31,6 +31,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AddressResponse } from '../../models/address-response';
 import { cpfValidator } from '../../../../shared/validators/cpf.validator';
 import { futureDateValidator } from '../../../../shared/validators/future-date.validator';
+import { SnackbarService } from '../../../../shared/services/snackbar.service';
 
 @Component({
   selector: 'app-pessoa-form',
@@ -61,10 +62,10 @@ export class PessoaForm implements OnInit {
 
     private viaCepService: ViaCepService,
 
-    private snackBar: MatSnackBar,
-
     private router: Router,
     private route: ActivatedRoute,
+    private snackbar: SnackbarService
+
 
 
   ) { }
@@ -346,16 +347,20 @@ export class PessoaForm implements OnInit {
         next: () => {
 
 
-          this.snackBar.open(
+          // this.snackBar.open(
 
-            'Pessoa atualizada com sucesso.',
+          //   'Pessoa atualizada com sucesso.',
 
-            'Fechar',
+          //   'Fechar',
 
-            {
-              duration: 3000
-            }
+          //   {
+          //     duration: 3000
+          //   }
 
+          // );
+
+          this.snackbar.success(
+            'Pessoa atualizada com sucesso.'
           );
 
 
@@ -369,19 +374,9 @@ export class PessoaForm implements OnInit {
 
         error: () => {
 
-
-          this.snackBar.open(
-
-            'Erro ao atualizar pessoa.',
-
-            'Fechar',
-
-            {
-              duration: 4000
-            }
-
+          this.snackbar.error(
+            'Ocorreu um erro ao processar a solicitação.'
           );
-
 
         }
 
@@ -405,16 +400,8 @@ export class PessoaForm implements OnInit {
 
         next: () => {
 
-          this.snackBar.open(
-
-            'Pessoa cadastrada com sucesso.',
-
-            'Fechar',
-
-            {
-              duration: 3000
-            }
-
+          this.snackbar.success(
+            'Pessoa criada com sucesso.'
           );
 
           this.router.navigate(['/pessoas']);
@@ -422,17 +409,9 @@ export class PessoaForm implements OnInit {
         },
 
         error: () => {
-
-          this.snackBar.open(
-
-            'Erro ao cadastrar pessoa.',
-
-            'Fechar',
-
-            {
-              duration: 4000
-            }
-
+          
+          this.snackbar.error(
+            'Erro ao processar formulario'
           );
 
         },
@@ -446,6 +425,7 @@ export class PessoaForm implements OnInit {
       });
 
   }
+
   voltar(): void {
 
     this.router.navigate(['/pessoas']);

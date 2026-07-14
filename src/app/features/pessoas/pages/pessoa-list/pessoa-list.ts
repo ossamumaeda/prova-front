@@ -12,6 +12,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialog } from '../../../../shared/components/confirm-dialog/confirm-dialog';
+import { SnackbarService } from '../../../../shared/services/snackbar.service';
 
 @Component({
   selector: 'app-pessoa-list',
@@ -48,7 +49,8 @@ export class PessoaList implements OnInit {
     private pessoaService: PessoaService,
     private router: Router,
     private cd: ChangeDetectorRef,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackbar: SnackbarService
 
 
   ) { }
@@ -77,6 +79,9 @@ export class PessoaList implements OnInit {
         error: (error) => {
 
           console.error(error);
+          this.snackbar.error(
+            'Ocorreu um erro ao processar a solicitação.'
+          );
 
         }
 
