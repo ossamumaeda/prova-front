@@ -10,6 +10,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialog } from '../../../../shared/components/confirm-dialog/confirm-dialog';
 
 @Component({
   selector: 'app-pessoa-list',
@@ -19,7 +21,8 @@ import { MatCardModule } from '@angular/material/card';
     MatIconModule,
     MatInputModule,
     MatFormFieldModule,
-    MatCardModule
+    MatCardModule,
+
   ],
   templateUrl: './pessoa-list.html',
   styleUrl: './pessoa-list.scss'
@@ -44,7 +47,9 @@ export class PessoaList implements OnInit {
   constructor(
     private pessoaService: PessoaService,
     private router: Router,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private dialog: MatDialog
+
 
   ) { }
 
@@ -88,24 +93,57 @@ export class PessoaList implements OnInit {
 
   }
 
-  remover(id: string) {
+  remover(pessoa: Pessoa): void {
 
-    if (!confirm(
-      'Deseja remover esta pessoa?'
-    )) {
-      return;
-    }
+    const dialogRef = this.dialog.open(
 
+      ConfirmDialog,
 
-    this.pessoaService
-      .delete(id)
-      .subscribe({
+      {
 
-        next: () => {
+        width: '420px',
 
-          this.buscarPessoas();
+        data: {
+
+          title: 'Excluir Pessoa',
+
+          message:
+            `Deseja realmente excluir "${pessoa.nome}"?\n\nEsta ação não poderá ser desfeita.`,
+
+          confirmText: 'Excluir',
+
+          cancelText: 'Cancelar'
 
         }
+
+      }
+
+    );
+
+    dialogRef.afterClosed()
+      .subscribe(confirmado => {
+
+        if (!confirmado) {
+          return;
+        }
+
+        this.pessoaService
+          .delete(pessoa.id)
+          .subscribe({
+
+            next: () => {
+
+              this.buscarPessoas();
+
+            },
+
+            error: erro => {
+
+              console.error(erro);
+
+            }
+
+          });
 
       });
 
