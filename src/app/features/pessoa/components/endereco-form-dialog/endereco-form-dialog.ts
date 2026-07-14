@@ -22,6 +22,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { Endereco } from '../../../../core/models/pessoa';
+import { ViaCepService } from '../../../../core/services/via-cep.service';
 
 
 
@@ -75,9 +76,11 @@ export class EnderecoFormDialog implements OnInit {
 
 
     @Inject(MAT_DIALOG_DATA)
-    public data: EnderecoFormData
+    public data: EnderecoFormData,
+    private viaCepService: ViaCepService,
 
-  ) {}
+
+  ) { }
 
 
 
@@ -92,7 +95,66 @@ export class EnderecoFormDialog implements OnInit {
 
   }
 
+  buscarCep(): void {
 
+
+    const cep = this.form
+      .get('codigoPostal')
+      ?.value
+      ?.replace(/\D/g, '');
+
+
+
+    if (!cep || cep.length !== 8) {
+
+      return;
+
+    }
+
+
+
+    this.viaCepService
+      .buscar(cep)
+      .subscribe({
+
+        next: endereco => {
+
+
+          this.form.patchValue({
+
+            logradouro:
+              endereco.logradouro,
+
+            bairro:
+              endereco.bairro,
+
+            municipio:
+              endereco.localidade,
+
+            estado:
+              endereco.uf
+
+          });
+
+
+        },
+
+
+        error: erro => {
+
+
+          console.error(
+            'Erro ao buscar CEP',
+            erro
+          );
+
+
+        }
+
+      });
+
+
+  }
 
   criarFormulario(): void {
 
@@ -156,7 +218,7 @@ export class EnderecoFormDialog implements OnInit {
   salvar(): void {
 
 
-    if(this.form.invalid){
+    if (this.form.invalid) {
 
       this.form.markAllAsTouched();
 

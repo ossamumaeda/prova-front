@@ -59,7 +59,17 @@ export class EnderecoManagementDialog implements OnInit {
 
   removerEndereco(endereco: Endereco): void {
 
+    if (this.enderecos.length <= 1) {
 
+
+      this.snackbar.error(
+        'A pessoa deve possuir pelo menos um endereço cadastrado.'
+      );
+
+
+      return;
+
+    }
     const dialogRef = this.dialog.open(
       ConfirmDialog,
       {
