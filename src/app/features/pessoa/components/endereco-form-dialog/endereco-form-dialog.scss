@@ -1,0 +1,30 @@
+form {
+
+  display:grid;
+
+  grid-template-columns:1fr 1fr;
+
+  gap:16px;
+
+}
+
+
+mat-form-field {
+
+  width:100%;
+
+}
+
+
+mat-form-field:nth-child(3) {
+
+  grid-column:span 2;
+
+}
+
+
+mat-form-field:nth-child(5) {
+
+  grid-column:span 2;
+
+}

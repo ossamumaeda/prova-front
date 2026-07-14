@@ -1,0 +1,157 @@
+<h2 mat-dialog-title>
+
+  <mat-icon>
+    home
+  </mat-icon>
+
+  Endereços de {{ pessoa.nome }}
+
+</h2>
+
+
+<mat-dialog-content>
+
+
+  <div class="toolbar">
+
+    <button 
+      mat-raised-button
+      color="primary"
+      (click)="novoEndereco()">
+
+
+      <mat-icon>
+        add
+      </mat-icon>
+
+      Novo endereço
+
+
+    </button>
+
+  </div>
+
+
+
+  @if(enderecos.length === 0) {
+
+
+    <p class="empty">
+
+      Nenhum endereço cadastrado.
+
+    </p>
+
+
+  } @else {
+
+
+    @for(endereco of enderecos; track endereco.id) {
+
+
+      <mat-card class="endereco-card">
+
+
+        <div class="card-header">
+
+
+          <strong>
+            {{ endereco.tipo }}
+          </strong>
+
+
+          <div>
+
+
+            <button 
+              mat-icon-button
+              matTooltip="Editar"
+              (click)="editarEndereco(endereco)">
+
+
+              <mat-icon>
+                edit
+              </mat-icon>
+
+
+            </button>
+
+
+
+            <button 
+              mat-icon-button
+              color="warn"
+              matTooltip="Excluir"
+              (click)="removerEndereco(endereco)">
+
+
+              <mat-icon>
+                delete
+              </mat-icon>
+
+
+            </button>
+
+
+          </div>
+
+
+        </div>
+
+
+        <p>
+
+          {{ endereco.logradouro }},
+          {{ endereco.numero }}
+
+        </p>
+
+
+        @if(endereco.complemento) {
+
+          <p>
+            {{ endereco.complemento }}
+          </p>
+
+        }
+
+
+        <p>
+
+          {{ endereco.bairro }} -
+          {{ endereco.municipio }}/{{ endereco.estado }}
+
+        </p>
+
+
+        <small>
+
+          CEP: {{ endereco.codigoPostal }}
+
+        </small>
+
+
+      </mat-card>
+
+
+    }
+
+
+  }
+
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+
+
+<button 
+  mat-button
+  (click)="fechar()">
+
+  Fechar
+
+</button>
+
+
+</mat-dialog-actions>

@@ -13,7 +13,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialog } from '../../../../shared/components/confirm-dialog/confirm-dialog';
 import { SnackbarService } from '../../../../shared/services/snackbar.service';
-
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { EnderecoManagementDialog } from '../../../pessoa/components/endereco-management-dialog/endereco-management-dialog';
 @Component({
   selector: 'app-pessoa-list',
   imports: [
@@ -23,6 +24,7 @@ import { SnackbarService } from '../../../../shared/services/snackbar.service';
     MatInputModule,
     MatFormFieldModule,
     MatCardModule,
+    MatTooltipModule
 
   ],
   templateUrl: './pessoa-list.html',
@@ -58,6 +60,18 @@ export class PessoaList implements OnInit {
   ngOnInit(): void {
 
     this.buscarPessoas();
+
+  }
+
+  gerenciarEnderecos(pessoa: Pessoa): void {
+    this.dialog.open(
+      EnderecoManagementDialog,
+      {
+        width: '700px',
+        maxHeight: '80vh',
+        data: pessoa
+      }
+    );
 
   }
 

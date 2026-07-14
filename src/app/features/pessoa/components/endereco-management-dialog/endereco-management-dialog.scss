@@ -1,0 +1,54 @@
+.toolbar {
+
+  display:flex;
+
+  justify-content:flex-end;
+
+  margin-bottom:20px;
+
+}
+
+
+.endereco-card {
+
+  margin-bottom:16px;
+
+  padding:16px;
+
+  border-radius:12px;
+
+}
+
+
+.card-header {
+
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:center;
+
+}
+
+
+.card-header strong {
+
+  text-transform:uppercase;
+
+}
+
+
+.endereco-card p {
+
+  margin:8px 0;
+
+}
+
+
+.empty {
+
+  text-align:center;
+
+  padding:32px;
+
+}
