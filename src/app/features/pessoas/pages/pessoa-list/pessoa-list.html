@@ -1,106 +1,151 @@
-<h1>
-  Pessoas
-</h1>
+<div class="page">
+
+  <h1 class="page-title">
+
+    <mat-icon>
+
+      people
+
+    </mat-icon>
+
+    Pessoas
+
+  </h1>
+
+  <div class="toolbar">
+
+    <button mat-raised-button color="primary" (click)="novaPessoa()">
+
+      <mat-icon>
+
+        add
+
+      </mat-icon>
+
+      Nova Pessoa
+
+    </button>
+
+    <mat-form-field appearance="outline" class="search-field">
+
+      <input matInput placeholder="Pesquisar por nome ou CPF" (keyup)="filtrar($event)" />
+
+      <mat-icon matSuffix>
+        search
+      </mat-icon>
+
+    </mat-form-field>
+
+  </div>
+  @if (pessoasFiltradas.length === 0) {
+
+  <mat-card>
+
+    <p>Nenhuma pessoa encontrada.</p>
+
+  </mat-card>
+
+  } @else {
+  <div class="table-container">
+    <table mat-table [dataSource]="pessoasFiltradas" class="mat-elevation-z8">
+
+      <!-- Nome -->
+      <ng-container matColumnDef="nome">
+
+        <th mat-header-cell *matHeaderCellDef>
+          Nome
+        </th>
 
 
-<button mat-raised-button color="primary" (click)="novaPessoa()">
-  Nova pessoa
-</button>
+        <td mat-cell *matCellDef="let pessoa">
+          {{ pessoa.nome }}
+        </td>
 
-
-<table mat-table [dataSource]="pessoas" class="mat-elevation-z8">
-
-
-  <!-- Nome -->
-  <ng-container matColumnDef="nome">
-
-    <th mat-header-cell *matHeaderCellDef>
-      Nome
-    </th>
-
-
-    <td mat-cell *matCellDef="let pessoa">
-      {{ pessoa.nome }}
-    </td>
-
-  </ng-container>
-
-
-
-  <!-- CPF -->
-  <ng-container matColumnDef="cpf">
-
-    <th mat-header-cell *matHeaderCellDef>
-      CPF
-    </th>
-
-
-    <td mat-cell *matCellDef="let pessoa">
-      {{ pessoa.cpf }}
-    </td>
-
-  </ng-container>
-
-
-
-  <!-- Email -->
-  <ng-container matColumnDef="email">
-
-    <th mat-header-cell *matHeaderCellDef>
-      Email
-    </th>
-
-
-    <td mat-cell *matCellDef="let pessoa">
-      {{ pessoa.email }}
-    </td>
-
-  </ng-container>
-
-
-
-  <ng-container matColumnDef="acoes">
-
-    <th mat-header-cell *matHeaderCellDef>
-      Ações
-    </th>
-
-
-    <td mat-cell *matCellDef="let pessoa">
-
-
-      <button mat-icon-button (click)="editar(pessoa.id)">
-
-        <mat-icon>
-          edit
-        </mat-icon>
-
-      </button>
-
-
-      <button mat-icon-button color="warn" (click)="remover(pessoa.id)">
-
-        <mat-icon>
-          delete
-        </mat-icon>
-
-      </button>
-
-
-    </td>
-
-  </ng-container>
+      </ng-container>
 
 
 
-  <!-- Header -->
-  <tr mat-header-row *matHeaderRowDef="columns">
-  </tr>
+      <!-- CPF -->
+      <ng-container matColumnDef="cpf">
+
+        <th mat-header-cell *matHeaderCellDef>
+          CPF
+        </th>
 
 
-  <!-- Rows -->
-  <tr mat-row *matRowDef="let row; columns: columns;">
-  </tr>
+        <td mat-cell *matCellDef="let pessoa">
+          {{ pessoa.cpf }}
+        </td>
+
+      </ng-container>
 
 
-</table>
+
+      <!-- Email -->
+      <ng-container matColumnDef="email">
+
+        <th mat-header-cell *matHeaderCellDef>
+          Email
+        </th>
+
+
+        <td mat-cell *matCellDef="let pessoa">
+          {{ pessoa.email }}
+        </td>
+
+      </ng-container>
+
+
+
+      <ng-container matColumnDef="acoes">
+
+        <th mat-header-cell *matHeaderCellDef>
+          Ações
+        </th>
+
+
+        <td mat-cell *matCellDef="let pessoa">
+
+          <div class="actions">
+
+            <button mat-icon-button (click)="editar(pessoa.id)">
+
+              <mat-icon>
+                edit
+              </mat-icon>
+
+            </button>
+
+
+            <button mat-icon-button color="warn" (click)="remover(pessoa.id)">
+
+              <mat-icon>
+                delete
+              </mat-icon>
+
+            </button>
+          </div>
+
+
+        </td>
+
+      </ng-container>
+
+
+
+      <!-- Header -->
+      <tr mat-header-row *matHeaderRowDef="columns">
+      </tr>
+
+
+      <!-- Rows -->
+      <tr mat-row *matRowDef="let row; columns: columns;">
+      </tr>
+
+
+    </table>
+  </div>
+
+  }
+
+</div>

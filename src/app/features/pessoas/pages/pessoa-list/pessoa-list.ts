@@ -6,14 +6,20 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { PessoaService } from '../../../../core/services/pessoa';
 import { Pessoa } from '../../../../core/models/pessoa';
-import {MatIconModule} from '@angular/material/icon';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-pessoa-list',
   imports: [
     MatTableModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatCardModule
   ],
   templateUrl: './pessoa-list.html',
   styleUrl: './pessoa-list.scss'
@@ -22,7 +28,7 @@ export class PessoaList implements OnInit {
 
 
   pessoas: Pessoa[] = [];
-
+  pessoasFiltradas: Pessoa[] = [];
 
   columns: string[] = [
     'nome',
@@ -32,7 +38,8 @@ export class PessoaList implements OnInit {
   ];
 
   loading = false;
-
+  readonly filterPlaceholder =
+    'Pesquisar por nome ou CPF';
 
   constructor(
     private pessoaService: PessoaService,
@@ -40,6 +47,38 @@ export class PessoaList implements OnInit {
     private cd: ChangeDetectorRef
 
   ) { }
+
+  ngOnInit(): void {
+
+    this.buscarPessoas();
+
+  }
+
+  buscarPessoas(): void {
+
+    this.pessoaService.findAll()
+      .subscribe({
+
+        next: (response) => {
+
+          this.pessoas = response;
+          this.pessoasFiltradas = [...response];
+
+
+          this.cd.detectChanges();
+
+        },
+
+        error: (error) => {
+
+          console.error(error);
+
+        }
+
+      });
+
+  }
+
   editar(id: string) {
 
     this.router.navigate([
@@ -79,35 +118,25 @@ export class PessoaList implements OnInit {
 
   }
 
-  ngOnInit(): void {
+  filtrar(event: Event): void {
 
-    this.buscarPessoas();
+    const filtro = (event.target as HTMLInputElement)
+      .value
+      .trim()
+      .toLowerCase();
 
-  }
+    this.pessoasFiltradas = this.pessoas.filter(pessoa => {
 
-  buscarPessoas(): void {
+      const cpf = pessoa.cpf.replace(/\D/g, '');
 
-    this.pessoaService.findAll()
-      .subscribe({
+      return (
+        pessoa.nome.toLowerCase().includes(filtro) ||
+        cpf.includes(filtro.replace(/\D/g, ''))
+      );
 
-        next: (response) => {
-
-          this.pessoas = response;
-
-          this.cd.detectChanges();
-
-        },
-
-        error: (error) => {
-
-          console.error(error);
-
-        }
-
-      });
+    });
 
   }
-
 
   novaPessoa(): void {
 

@@ -446,7 +446,11 @@ export class PessoaForm implements OnInit {
       });
 
   }
+  voltar(): void {
 
+    this.router.navigate(['/pessoas']);
+
+  }
 
   private criarFormulario(): void {
 
