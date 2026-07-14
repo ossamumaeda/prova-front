@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { PersonResponse } from '../../features/pessoas/models/person-response';
 import { PersonRequest } from '../../features/pessoas/models/person-request';
+import { PersonUpdateRequest } from '../../features/pessoas/models/person-update-request';
 
 @Injectable({
   providedIn: 'root'
@@ -40,7 +41,7 @@ export class PessoaService {
 
   }
 
-  update(id: string, request: PersonRequest): Observable<PersonResponse> {
+  update(id: string, request: PersonUpdateRequest): Observable<PersonResponse> {
 
     return this.http.put<PersonResponse>(
       `${this.apiUrl }/${id}`,

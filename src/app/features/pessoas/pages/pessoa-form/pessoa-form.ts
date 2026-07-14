@@ -26,6 +26,9 @@ import { Router } from '@angular/router';
 import { PessoaService } from '../../../../core/services/pessoa';
 import { PersonRequest } from '../../models/person-request';
 import { TipoEndereco } from '../../models/enum-tipo-endereco';
+import { PersonUpdateRequest } from '../../models/person-update-request';
+import { ActivatedRoute } from '@angular/router';
+import { AddressResponse } from '../../models/address-response';
 
 @Component({
   selector: 'app-pessoa-form',
@@ -58,9 +61,15 @@ export class PessoaForm implements OnInit {
 
     private snackBar: MatSnackBar,
 
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute,
+
 
   ) { }
+  private pessoaId?: string;
+
+  editando = false;
+
   private readonly destroyRef = inject(DestroyRef);
   saving = false;
   loadingCep: boolean[] = [];
@@ -68,6 +77,202 @@ export class PessoaForm implements OnInit {
   ngOnInit(): void {
 
     this.criarFormulario();
+
+
+    const id =
+      this.route.snapshot.paramMap.get('id');
+
+
+    if (id) {
+
+      this.pessoaId = id;
+
+      this.editando = true;
+
+      this.carregarPessoa(id);
+
+    } else {
+
+      this.adicionarEndereco();
+
+    }
+
+  }
+
+  private carregarPessoa(id: string): void {
+
+
+    this.pessoaService
+      .findById(id)
+      .subscribe({
+
+        next: pessoa => {
+
+          this.form.patchValue({
+
+            cpf: pessoa.cpf,
+
+            nome: pessoa.nome,
+
+            email: pessoa.email,
+
+            dataNascimento:
+              pessoa.dataNascimento,
+
+            telefone:
+              pessoa.telefone
+
+          });
+
+
+          this.carregarEnderecos(
+            pessoa.enderecos
+          );
+
+        }
+
+      });
+
+  }
+
+  private carregarEnderecos(
+    enderecos: AddressResponse[]
+  ): void {
+
+
+    this.enderecos.clear();
+
+
+    enderecos.forEach(endereco => {
+
+
+      const form =
+        this.criarEndereco();
+
+
+      form.patchValue({
+
+        id: endereco.id,
+
+        tipo: endereco.tipo,
+
+        codigoPostal:
+          endereco.codigoPostal,
+
+        logradouro:
+          endereco.logradouro,
+
+        numero:
+          endereco.numero,
+
+        complemento:
+          endereco.complemento,
+
+        bairro:
+          endereco.bairro,
+
+        municipio:
+          endereco.municipio,
+
+        estado:
+          endereco.estado
+
+      });
+
+
+      this.enderecos.push(form);
+
+
+    });
+
+
+  }
+
+  private montarCreateRequest(): PersonRequest {
+
+    const value = this.form.getRawValue();
+
+
+    return {
+
+      cpf: value.cpf.replace(/\D/g, ''),
+
+      nome: value.nome,
+
+      email: value.email,
+
+      dataNascimento: value.dataNascimento,
+
+      telefone: value.telefone.replace(/\D/g, ''),
+
+      enderecos: value.enderecos.map(endereco => ({
+
+        ...endereco,
+
+        tipo: endereco.tipo!,
+
+        codigoPostal:
+          endereco.codigoPostal.replace(/\D/g, '')
+
+      }))
+
+    };
+
+  }
+  private montarUpdateRequest(): PersonUpdateRequest {
+
+    const value = this.form.getRawValue();
+
+
+    return {
+
+      pessoa: {
+
+        nome: value.nome,
+
+        email: value.email,
+
+        dataNascimento:
+          value.dataNascimento,
+
+        telefone:
+          value.telefone.replace(/\D/g, '')
+
+      },
+
+      enderecos:
+        value.enderecos.map(endereco => ({
+          ...(endereco.id
+            ? { id: endereco.id }
+            : {}
+          ),
+
+          tipo: endereco.tipo!,
+
+          codigoPostal:
+            endereco.codigoPostal.replace(/\D/g, ''),
+
+          logradouro:
+            endereco.logradouro,
+
+          numero:
+            endereco.numero,
+
+          complemento:
+            endereco.complemento,
+
+          bairro:
+            endereco.bairro,
+
+          municipio:
+            endereco.municipio,
+
+          estado:
+            endereco.estado
+
+        }))
+
+    };
 
   }
 
@@ -109,7 +314,76 @@ export class PessoaForm implements OnInit {
 
     }
 
-    this.criarPessoa();
+
+    if (this.editando) {
+
+      this.atualizarPessoa();
+
+    } else {
+
+      this.criarPessoa();
+
+    }
+
+  }
+
+  private atualizarPessoa(): void {
+
+
+    const request =
+      this.montarUpdateRequest();
+
+
+    this.pessoaService
+      .update(
+        this.pessoaId!,
+        request
+      )
+      .subscribe({
+
+        next: () => {
+
+
+          this.snackBar.open(
+
+            'Pessoa atualizada com sucesso.',
+
+            'Fechar',
+
+            {
+              duration: 3000
+            }
+
+          );
+
+
+          this.router.navigate([
+            '/pessoas'
+          ]);
+
+
+        },
+
+
+        error: () => {
+
+
+          this.snackBar.open(
+
+            'Erro ao atualizar pessoa.',
+
+            'Fechar',
+
+            {
+              duration: 4000
+            }
+
+          );
+
+
+        }
+
+      });
 
   }
 
@@ -117,22 +391,9 @@ export class PessoaForm implements OnInit {
 
     this.saving = true;
 
-    const value = this.form.getRawValue();
+    const request =
+      this.montarCreateRequest();
 
-    const request: PersonRequest = {
-      ...value,
-
-      enderecos: value.enderecos.map(endereco => ({
-
-        ...endereco,
-
-        tipo: endereco.tipo!,
-        codigoPostal: endereco.codigoPostal.replace(/\D/g, '')
-
-
-      }))
-
-    };
     this.pessoaService
       .create(request)
       .pipe(
@@ -184,34 +445,51 @@ export class PessoaForm implements OnInit {
 
   }
 
+
   private criarFormulario(): void {
 
     this.form = this.fb.group({
 
-      cpf: this.fb.control('', Validators.required),
+      cpf: [
+        '',
+        Validators.required
+      ],
 
-      nome: this.fb.control('', Validators.required),
+      nome: [
+        '',
+        Validators.required
+      ],
 
-      email: this.fb.control('', [
-        Validators.required,
-        Validators.email
-      ]),
+      email: [
+        '',
+        [
+          Validators.required,
+          Validators.email
+        ]
+      ],
 
-      dataNascimento: this.fb.control('', Validators.required),
+      dataNascimento: [
+        '',
+        Validators.required
+      ],
 
-      telefone: this.fb.control(''),
+      telefone: [
+        ''
+      ],
 
       enderecos: this.fb.array<EnderecoForm>([])
 
     });
-
-    this.adicionarEndereco();
 
   }
 
   private criarEndereco(): EnderecoForm {
 
     return this.fb.group({
+
+      id: this.fb.control<string | null>(
+        null
+      ),
 
       tipo: this.fb.control<TipoEndereco | null>(
         null,

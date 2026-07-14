@@ -3,37 +3,23 @@
 </h1>
 
 
-<button
-  mat-raised-button
-  color="primary"
-  (click)="novaPessoa()"
->
+<button mat-raised-button color="primary" (click)="novaPessoa()">
   Nova pessoa
 </button>
 
 
-<table
-  mat-table
-  [dataSource]="pessoas"
-  class="mat-elevation-z8"
->
+<table mat-table [dataSource]="pessoas" class="mat-elevation-z8">
 
 
   <!-- Nome -->
   <ng-container matColumnDef="nome">
 
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-    >
+    <th mat-header-cell *matHeaderCellDef>
       Nome
     </th>
 
 
-    <td
-      mat-cell
-      *matCellDef="let pessoa"
-    >
+    <td mat-cell *matCellDef="let pessoa">
       {{ pessoa.nome }}
     </td>
 
@@ -44,18 +30,12 @@
   <!-- CPF -->
   <ng-container matColumnDef="cpf">
 
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-    >
+    <th mat-header-cell *matHeaderCellDef>
       CPF
     </th>
 
 
-    <td
-      mat-cell
-      *matCellDef="let pessoa"
-    >
+    <td mat-cell *matCellDef="let pessoa">
       {{ pessoa.cpf }}
     </td>
 
@@ -66,18 +46,12 @@
   <!-- Email -->
   <ng-container matColumnDef="email">
 
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-    >
+    <th mat-header-cell *matHeaderCellDef>
       Email
     </th>
 
 
-    <td
-      mat-cell
-      *matCellDef="let pessoa"
-    >
+    <td mat-cell *matCellDef="let pessoa">
       {{ pessoa.email }}
     </td>
 
@@ -85,35 +59,33 @@
 
 
 
-  <!-- Ações -->
   <ng-container matColumnDef="acoes">
 
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-    >
+    <th mat-header-cell *matHeaderCellDef>
       Ações
     </th>
 
 
-    <td
-      mat-cell
-      *matCellDef="let pessoa"
-    >
+    <td mat-cell *matCellDef="let pessoa">
 
-      <button
-        mat-button
-      >
-        Editar
+
+      <button mat-icon-button (click)="editar(pessoa.id)">
+
+        <mat-icon>
+          edit
+        </mat-icon>
+
       </button>
 
 
-      <button
-        mat-button
-        color="warn"
-      >
-        Desativar
+      <button mat-icon-button color="warn" (click)="remover(pessoa.id)">
+
+        <mat-icon>
+          delete
+        </mat-icon>
+
       </button>
+
 
     </td>
 
@@ -122,18 +94,12 @@
 
 
   <!-- Header -->
-  <tr
-    mat-header-row
-    *matHeaderRowDef="columns"
-  >
+  <tr mat-header-row *matHeaderRowDef="columns">
   </tr>
 
 
   <!-- Rows -->
-  <tr
-    mat-row
-    *matRowDef="let row; columns: columns;"
-  >
+  <tr mat-row *matRowDef="let row; columns: columns;">
   </tr>
 
 

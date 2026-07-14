@@ -19,6 +19,11 @@ export const routes: Routes = [
   {
     path: 'pessoas/nova',
     component: PessoaForm
+  },
+
+  {
+    path: 'pessoas/:id',
+    component: PessoaForm
   }
 
 ];

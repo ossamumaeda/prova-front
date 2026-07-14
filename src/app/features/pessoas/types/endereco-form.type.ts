@@ -3,6 +3,8 @@ import { TipoEndereco } from '../models/enum-tipo-endereco';
 
 export type EnderecoForm = FormGroup<{
 
+  id: FormControl<string | null>;
+
   tipo: FormControl<TipoEndereco | null>;
 
   codigoPostal: FormControl<string>;
