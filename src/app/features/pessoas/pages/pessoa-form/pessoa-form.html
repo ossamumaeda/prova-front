@@ -1,0 +1,127 @@
+<div class="container">
+
+  <mat-card>
+
+    <mat-card-header>
+      <mat-card-title>
+        Cadastro de Pessoa
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+
+      <form [formGroup]="form">
+
+        <h2>Dados Pessoais</h2>
+
+        <div class="grid">
+
+          <mat-form-field appearance="outline" class="full">
+            <mat-label>Nome *</mat-label>
+            <input matInput formControlName="nome">
+
+            <mat-error *ngIf="form.controls.nome.invalid">
+              Nome é obrigatório.
+            </mat-error>
+
+          </mat-form-field>
+
+
+          <mat-form-field appearance="outline">
+            <mat-label>CPF *</mat-label>
+            <input matInput formControlName="cpf">
+
+            <mat-error *ngIf="form.controls.cpf.invalid">
+              CPF obrigatório.
+            </mat-error>
+
+          </mat-form-field>
+
+
+          <mat-form-field appearance="outline">
+            <mat-label>Data de nascimento *</mat-label>
+
+            <input matInput type="date" formControlName="dataNascimento">
+
+          </mat-form-field>
+
+
+          <mat-form-field appearance="outline" class="full">
+            <mat-label>Email *</mat-label>
+
+            <input matInput formControlName="email">
+
+            <mat-error *ngIf="form.controls.email.invalid">
+              Email inválido.
+            </mat-error>
+
+          </mat-form-field>
+
+
+          <mat-form-field appearance="outline" class="full">
+
+            <mat-label>Telefone</mat-label>
+
+            <input matInput formControlName="telefone">
+
+          </mat-form-field>
+
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="address-header">
+
+          <h2>Endereços</h2>
+
+          <button mat-raised-button color="primary" type="button" (click)="adicionarEndereco()">
+
+            <mat-icon>add</mat-icon>
+
+            Adicionar endereço
+
+          </button>
+
+        </div>
+
+
+        @for(endereco of enderecos.controls; track $index){
+
+        <app-endereco-card [form]="endereco" [index]="$index" [canRemove]="enderecos.length > 1"
+          (remove)="removerEndereco($index)" (buscarCep)="buscarCep($index)">
+        </app-endereco-card>
+
+        }
+
+
+        <div class="footer">
+
+          <button mat-stroked-button type="button">
+
+            Cancelar
+
+          </button>
+
+          <button mat-raised-button color="primary" type="button" [disabled]="saving" (click)="salvar()">
+
+            @if(saving){
+
+            Salvando...
+
+            } @else {
+
+            Salvar
+
+            }
+
+          </button>
+
+        </div>
+
+      </form>
+
+    </mat-card-content>
+
+  </mat-card>
+
+</div>

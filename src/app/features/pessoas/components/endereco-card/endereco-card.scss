@@ -1,0 +1,54 @@
+.address-card {
+
+    margin-top: 24px;
+    padding: 16px;
+
+}
+
+.header {
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 20px;
+
+}
+
+.grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 16px;
+
+}
+
+.full {
+
+    grid-column: 1 / -1;
+
+}
+
+mat-form-field {
+
+    width: 100%;
+
+}
+
+@media (max-width: 768px) {
+
+    .grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .full {
+
+        grid-column: auto;
+
+    }
+
+}
