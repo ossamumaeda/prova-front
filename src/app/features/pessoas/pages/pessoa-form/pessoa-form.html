@@ -25,10 +25,16 @@
           <mat-form-field appearance="outline" class="full">
             <mat-label>Nome *</mat-label>
             <input matInput formControlName="nome">
+            
+            @if(form.controls.nome.hasError('required')){
 
-            <mat-error *ngIf="form.controls.nome.invalid">
+            <mat-error>
+
               Nome é obrigatório.
+
             </mat-error>
+
+            }
 
           </mat-form-field>
 
@@ -37,9 +43,25 @@
             <mat-label>CPF *</mat-label>
             <input matInput formControlName="cpf">
 
-            <mat-error *ngIf="form.controls.cpf.invalid">
-              CPF obrigatório.
+            @if(form.controls.cpf.hasError('required')){
+
+            <mat-error>
+
+              CPF é obrigatório.
+
             </mat-error>
+
+            }
+
+            @if(form.controls.cpf.hasError('cpfInvalido')){
+
+            <mat-error>
+
+              CPF inválido.
+
+            </mat-error>
+
+            }
 
           </mat-form-field>
 
@@ -48,8 +70,28 @@
             <mat-label>Data de nascimento *</mat-label>
 
             <input matInput type="date" formControlName="dataNascimento">
+            @if(form.controls.dataNascimento.hasError('required')){
 
+            <mat-error>
+
+              Data de nascimento é obrigatória.
+
+            </mat-error>
+
+            }
+
+            @if(form.controls.dataNascimento.hasError('dataFutura')){
+
+            <mat-error>
+
+              A data não pode ser futura.
+
+            </mat-error>
+
+            }
           </mat-form-field>
+
+
 
 
           <mat-form-field appearance="outline" class="full">
@@ -57,9 +99,16 @@
 
             <input matInput formControlName="email">
 
-            <mat-error *ngIf="form.controls.email.invalid">
-              Email inválido.
+
+            @if(form.controls.email.hasError('email')){
+
+            <mat-error>
+
+              E-mail inválido.
+
             </mat-error>
+
+            }
 
           </mat-form-field>
 

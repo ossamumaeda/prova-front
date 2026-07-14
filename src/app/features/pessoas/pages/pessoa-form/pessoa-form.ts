@@ -29,6 +29,8 @@ import { TipoEndereco } from '../../models/enum-tipo-endereco';
 import { PersonUpdateRequest } from '../../models/person-update-request';
 import { ActivatedRoute } from '@angular/router';
 import { AddressResponse } from '../../models/address-response';
+import { cpfValidator } from '../../../../shared/validators/cpf.validator';
+import { futureDateValidator } from '../../../../shared/validators/future-date.validator';
 
 @Component({
   selector: 'app-pessoa-form',
@@ -450,10 +452,13 @@ export class PessoaForm implements OnInit {
 
     this.form = this.fb.group({
 
-      cpf: [
+      cpf: this.fb.control(
         '',
-        Validators.required
-      ],
+        [
+          Validators.required,
+          cpfValidator()
+        ]
+      ),
 
       nome: [
         '',
@@ -468,10 +473,13 @@ export class PessoaForm implements OnInit {
         ]
       ],
 
-      dataNascimento: [
+      dataNascimento: this.fb.control(
         '',
-        Validators.required
-      ],
+        [
+          Validators.required,
+          futureDateValidator()
+        ]
+      ),
 
       telefone: [
         ''
